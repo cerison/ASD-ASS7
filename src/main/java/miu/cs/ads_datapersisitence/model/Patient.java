@@ -22,6 +22,5 @@ public class Patient {
     @Column(nullable = true)
     private List<Appointment> appointment = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL)
-    @Column(nullable = true)
     private Address address;
 }
