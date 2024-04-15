@@ -17,6 +17,7 @@ public class AddressImpl implements AddressService {
     @Autowired
     AddressRepository addressRepository;
 
+
     @Autowired
     PatientRepository patientRepository;
 
@@ -32,8 +33,12 @@ public class AddressImpl implements AddressService {
                     var patient = patientRepository.findAll()
                             .stream()
                             .filter(patient1 -> patient1.getAddress().getId() == address.getId())
-                            .toList().get(0);
-                    address.setPatientDto(new PatientDto(patient.getFname(),patient.getLname()));
+                            .toList();
+                    if(patient.size() > 0 ){
+                        if(patient.get(0) != null){
+                            address.setPatientDto(new PatientDto(patient.get(0).getFname(),patient.get(0).getLname()));
+                        }
+                    }
                     return address;
                 })
                 .sorted(Comparator.comparing(AddressDto::getCity))

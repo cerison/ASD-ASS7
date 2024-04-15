@@ -1,5 +1,6 @@
 package miu.cs.ads_datapersisitence.controller;
 
+import miu.cs.ads_datapersisitence.exception.NotFoundException;
 import miu.cs.ads_datapersisitence.model.Patient;
 import miu.cs.ads_datapersisitence.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,12 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> getPatient(@PathVariable(value = "id") Integer id) {
-        return ResponseEntity.ok(patientService.getPatient(id));
+    public ResponseEntity<Patient> getPatient(@PathVariable(value = "id") Integer id) throws NotFoundException {
+        var patient = patientService.getPatient(id);
+        if(patient == null){
+            throw  new NotFoundException(id + " not found");
+        }
+        return ResponseEntity.ok(patient);
     }
 
     @GetMapping("/search/{query}")
@@ -37,8 +42,12 @@ public class PatientController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Patient updatePatient(@PathVariable(value = "id") Integer id, @RequestBody Patient patient) {
-        return patientService.updatePatient(id,patient);
+    public ResponseEntity<Patient> updatePatient(@PathVariable(value = "id") Integer id, @RequestBody Patient patient)  throws NotFoundException {
+        var patient1 = patientService.getPatient(id);
+        if(patient1 == null){
+            throw  new NotFoundException(id + " not found");
+        }
+        return ResponseEntity.ok(patientService.updatePatient(id,patient));
     }
 
     @DeleteMapping("/{id}")
