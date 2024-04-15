@@ -19,7 +19,9 @@ public class Patient {
     private String lname;
     @OneToMany
     @JoinColumn(name = "patient")
+    @Column(nullable = true)
     private List<Appointment> appointment = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL)
+    @Column(nullable = true)
     private Address address;
 }

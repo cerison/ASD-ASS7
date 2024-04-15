@@ -3,6 +3,8 @@ package miu.cs.ads_datapersisitence.controller;
 import miu.cs.ads_datapersisitence.model.Patient;
 import miu.cs.ads_datapersisitence.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public Patient getPatient(@PathVariable(value = "id") Integer id) {
-        return patientService.getPatient(id);
+    public ResponseEntity<Patient> getPatient(@PathVariable(value = "id") Integer id) {
+        return ResponseEntity.ok(patientService.getPatient(id));
     }
 
     @GetMapping("/search/{query}")
@@ -34,6 +36,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Patient updatePatient(@PathVariable(value = "id") Integer id, @RequestBody Patient patient) {
         return patientService.updatePatient(id,patient);
     }
